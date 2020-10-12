@@ -14,24 +14,12 @@
   </div>
 
   <a href="/lec02janken?hand=Gu">ぐー</a>
-  <div th:if="${kekka}">
-    あなたの手 [[$myhand]]
-    相手の手 Gu
-    結果 [[${kekka}]]
-  </div>
-
-
   <a href="/lec02janken?hand=Cho">ちょき</a>
-  <div th:if="${kekka}">
-    あなたの手 [[$myhand]]
-    相手の手 Gu
-    結果 [[${kekka}]]
-  </div>
-
   <a href="/lec02janken?hand=Pa">ぱー</a>
+
   <div th:if="${kekka}">
-    あなたの手 [[$myhand]]
-    相手の手 Gu
+    あなたの手 [[${myhand}]] <br>
+    相手の手 Gu <br>
     結果 [[${kekka}]]
   </div>
 
