@@ -11,12 +11,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
 
 import oit.is.z0256.kaizi.janken.model.User;
 import oit.is.z0256.kaizi.janken.model.UserMapper;
 
 import oit.is.z0256.kaizi.janken.model.Match;
 import oit.is.z0256.kaizi.janken.model.MatchMapper;
+
+import oit.is.z0256.kaizi.janken.model.MatchInfo;
+import oit.is.z0256.kaizi.janken.model.MatchInfoMapper;
+import oit.is.z0256.kaizi.janken.service.AsyncKekka;
+
+
 
 import oit.is.z0256.kaizi.janken.model.Entry;
 
@@ -31,6 +39,12 @@ public class Lec02Controller{
 
   @Autowired
   MatchMapper matchMapper;
+
+  @Autowired
+  MatchInfoMapper matchInfoMapper;
+
+  @Autowired
+  AsyncKekka kekka;
 
 
 
@@ -53,8 +67,13 @@ public class Lec02Controller{
 
   @GetMapping("/result")
   @Transactional
-  public String lec02janken(@RequestParam Integer id,@RequestParam String hand,ModelMap model){
+  public String result(@RequestParam Integer id,@RequestParam String hand,ModelMap model,Principal prin){
     String kekka = "";
+    String login_user = prin.getName();
+    User user3 = userMapper.selectByName(login_user);
+    System.out.println(user3.getId+":"+user3.getName);
+
+
 
     if(hand.equals("Gu")){
       kekka = "Draw!";
@@ -69,18 +88,38 @@ public class Lec02Controller{
     model.addAttribute("kekka",kekka);
 
     Match match2 = new Match();
-    match2.setUser_1(2);
+    match2.setUser_1(user3.getId());
     match2.setUser_2(id);
     match2.setUser_1_hand(hand);
     match2.setUser_2_hand("Gu");
+    match2.setIs_active(true);
     matchMapper.insertMatch(match2);
-    return "match.html";
+
+    model.addAttribute("login_user",login_user);
+    return "wait.html";
   }
 
+  @GetMapping("/result2")
+  public SseEmitter sample58() {
+    final SseEmitter sseEmitter = new SseEmitter();
+    this.kekka.asyncShowmatch(sseEmitter);
+    return sseEmitter;
+  }
+
+
   @GetMapping("/match")
+  @Transactional
   public String match(@RequestParam Integer id,ModelMap model,Principal prin){
       String login_user = prin.getName();
+      User user2 = userMapper.selectById(id);
+      User myuser = userMapper.selectByName(login_user);
+      MatchInfo match_info = new MatchInfo();
+      match_info.setUser_1(myuser.getId());
+      match_info.setUser_2(id);
+      match_info.setIs_active(true);
+      matchInfoMapper.insertMatchInfo(match_info);
       model.addAttribute("login_user",login_user);
+      model.addAttribute("user2",user2);
       return "match.html";
 
   }
