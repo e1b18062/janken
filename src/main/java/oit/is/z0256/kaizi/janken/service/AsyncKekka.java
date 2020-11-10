@@ -17,21 +17,25 @@ import oit.is.z0256.kaizi.janken.model.MatchMapper;
 @Service
 public class AsyncKekka{
 
-   private final Logger logger = LoggerFactory.getLogger(AsyncShopService57.class);
+   private final Logger logger = LoggerFactory.getLogger(AsyncKekka.class);
 
    @Autowired
    MatchMapper mMapper;
 
    @Async
    public void asyncShowmatch(SseEmitter emitter ){
-     boolean is_active = true;
+     boolean is_active;
+      Match match2 = new Match();
+      Match match = mMapper.selectByIs_active(match2.getIs_active());
         try{
         while (true) {
         TimeUnit.MILLISECONDS.sleep(10);
-        if (false == is_active) {
+        if (false == match.getIs_active()) {
           continue;
         }
-        
+
+
+
        }
      } catch (Exception e) {
       // 例外の名前とメッセージだけ表示する
@@ -39,6 +43,5 @@ public class AsyncKekka{
     } finally {
       emitter.complete();
     }
-    System.out.println("asyncShowFruitsList complete");
     }
   }

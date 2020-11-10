@@ -6,7 +6,7 @@
   <title>janken</title>
 <script>
   window.onload = function(){
-    var sse = new EventSource('/result');
+    var sse = new EventSource('/result2');
     sse.onmessage = function (event){
       console.log(event.data);
       document.getElementById("p1").textContent = event.data;

@@ -8,7 +8,7 @@ CREATE TABLE matches (
     user_2 INT NOT NULL REFERENCES users(id),
     user_1_hand CHAR NOT NULL,
     user_2_hand CHAR NOT NULL,
-    is_active boolean,
+    is_active boolean
 );
 
 CREATE TABLE match_info (

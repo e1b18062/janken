@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
 
 import oit.is.z0256.kaizi.janken.model.User;
 import oit.is.z0256.kaizi.janken.model.UserMapper;
@@ -20,6 +22,8 @@ import oit.is.z0256.kaizi.janken.model.MatchMapper;
 
 import oit.is.z0256.kaizi.janken.model.MatchInfo;
 import oit.is.z0256.kaizi.janken.model.MatchInfoMapper;
+import oit.is.z0256.kaizi.janken.service.AsyncKekka;
+
 
 
 import oit.is.z0256.kaizi.janken.model.Entry;
@@ -38,6 +42,9 @@ public class Lec02Controller{
 
   @Autowired
   MatchInfoMapper matchInfoMapper;
+
+  @Autowired
+  AsyncKekka kekka;
 
 
 
@@ -60,10 +67,12 @@ public class Lec02Controller{
 
   @GetMapping("/result")
   @Transactional
-  public String lec02janken(@RequestParam Integer id,@RequestParam String hand,ModelMap model,Principal prin){
+  public String result(@RequestParam Integer id,@RequestParam String hand,ModelMap model,Principal prin){
     String kekka = "";
     String login_user = prin.getName();
     User user3 = userMapper.selectByName(login_user);
+    System.out.println(user3.getId+":"+user3.getName);
+
 
 
     if(hand.equals("Gu")){
@@ -88,6 +97,13 @@ public class Lec02Controller{
 
     model.addAttribute("login_user",login_user);
     return "wait.html";
+  }
+
+  @GetMapping("/result2")
+  public SseEmitter sample58() {
+    final SseEmitter sseEmitter = new SseEmitter();
+    this.kekka.asyncShowmatch(sseEmitter);
+    return sseEmitter;
   }
 
 
