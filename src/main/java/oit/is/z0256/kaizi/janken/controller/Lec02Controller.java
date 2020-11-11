@@ -71,7 +71,7 @@ public class Lec02Controller{
     String kekka = "";
     String login_user = prin.getName();
     User user3 = userMapper.selectByName(login_user);
-    System.out.println(user3.getId+":"+user3.getName);
+    System.out.println(user3.getId()+":"+user3.getName());
 
 
 
