@@ -24,12 +24,10 @@ public class AsyncKekka{
 
    @Async
    public void asyncShowmatch(SseEmitter emitter ){
-     boolean is_active;
-      Match match2 = new Match();
-      Match match = mMapper.selectByIs_active(match2.getIs_active());
+      Match match = mMapper.selectByIs_active(true);
         try{
         while (true) {
-        TimeUnit.MILLISECONDS.sleep(10);
+        TimeUnit.MILLISECONDS.sleep(1000);
         if (false == match.getIs_active()) {
           continue;
         }
